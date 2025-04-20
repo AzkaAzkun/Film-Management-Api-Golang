@@ -34,6 +34,7 @@ func NewRest() RestConfig {
 		filmRepository     repository.FilmRepository     = repository.NewFilm(db)
 		filmListRepository repository.FilmListRepository = repository.NewFilmList(db)
 		reviewRepository   repository.ReviewRepository   = repository.NewReview(db)
+		reactionRepository repository.ReactionRepository = repository.NewReaction(db)
 
 		//=========== (SERVICE) ===========//
 		authService     service.AuthService     = service.NewAuth(userRepository, db)
@@ -42,6 +43,7 @@ func NewRest() RestConfig {
 		filmService     service.FilmService     = service.NewFilm(filmRepository, genreRepository, db)
 		filmListService service.FilmListService = service.NewFilmList(filmListRepository, filmRepository, reviewRepository, db)
 		reviewService   service.ReviewService   = service.NewReview(reviewRepository, filmRepository, db)
+		reactionService service.ReactionService = service.NewReaction(reactionRepository, reviewRepository, db)
 
 		//=========== (CONTROLLER) ===========//
 		authController     controller.AuthController     = controller.NewAuth(authService)
@@ -50,6 +52,7 @@ func NewRest() RestConfig {
 		filmController     controller.FilmController     = controller.NewFilm(filmService)
 		filmListController controller.FilmListController = controller.NewFilmList(filmListService)
 		reviewController   controller.ReviewController   = controller.NewReview(reviewService)
+		reactionController controller.ReactionController = controller.NewReaction(reactionService)
 	)
 
 	routes.Auth(server, authController, middleware)
@@ -58,6 +61,7 @@ func NewRest() RestConfig {
 	routes.Film(server, filmController, middleware)
 	routes.FilmList(server, filmListController, middleware)
 	routes.Review(server, reviewController, middleware)
+	routes.Reaction(server, reactionController, middleware)
 	return RestConfig{
 		server: server,
 	}

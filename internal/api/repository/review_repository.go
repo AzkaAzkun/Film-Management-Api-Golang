@@ -10,7 +10,9 @@ import (
 type (
 	ReviewRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, review entity.Review) (entity.Review, error)
+		GetById(ctx context.Context, tx *gorm.DB, reviewId string) (entity.Review, error)
 		GetByFilmId(ctx context.Context, tx *gorm.DB, filmId string) ([]entity.Review, error)
+		Update(ctx context.Context, tx *gorm.DB, review entity.Review) (entity.Review, error)
 	}
 
 	reviewRepository struct {
@@ -34,6 +36,19 @@ func (r *reviewRepository) Create(ctx context.Context, tx *gorm.DB, review entit
 	return review, nil
 }
 
+func (r *reviewRepository) GetById(ctx context.Context, tx *gorm.DB, reviewId string) (entity.Review, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var review entity.Review
+	if err := tx.WithContext(ctx).Where("id = ?", reviewId).Find(&review).Error; err != nil {
+		return review, err
+	}
+
+	return review, nil
+}
+
 func (r *reviewRepository) GetByFilmId(ctx context.Context, tx *gorm.DB, filmId string) ([]entity.Review, error) {
 	if tx == nil {
 		tx = r.db
@@ -45,4 +60,16 @@ func (r *reviewRepository) GetByFilmId(ctx context.Context, tx *gorm.DB, filmId 
 	}
 
 	return reviews, nil
+}
+
+func (r *reviewRepository) Update(ctx context.Context, tx *gorm.DB, review entity.Review) (entity.Review, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Save(&review).Error; err != nil {
+		return review, err
+	}
+
+	return review, nil
 }
