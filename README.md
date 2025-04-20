@@ -59,7 +59,7 @@ go run cmd/app/main.go
 Server akan berjalan di `http://localhost:8090`
 
 ## Endpoint API
-Untuk list endpoint silahkan mengakses dokumentasi [ini](https://documenter.getpostman.com/view/34227976/2sAYkKGwzT)
+Untuk list endpoint silahkan mengakses dokumentasi [ini](https://documenter.getpostman.com/view/34227976/2sB2iwEDrc)
 
 ## Kontribusi
 Jika ingin berkontribusi, silakan fork repository ini dan buat pull request dengan perubahan yang diusulkan.
