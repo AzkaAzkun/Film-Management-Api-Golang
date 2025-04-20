@@ -29,7 +29,7 @@ func NewFilmList(filmlistService service.FilmListService) FilmListController {
 func (c *filmListController) Create(ctx *gin.Context) {
 	var req dto.FilmListRequest
 	if err := ctx.ShouldBind(&req); err != nil {
-		response.NewFailed("failed input", myerror.ErrBodyRequest).Send(ctx)
+		response.NewFailed("invalid input data", myerror.ErrBodyRequest).Send(ctx)
 		return
 	}
 

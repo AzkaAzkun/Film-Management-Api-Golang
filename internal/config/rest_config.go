@@ -33,13 +33,15 @@ func NewRest() RestConfig {
 		genreRepository    repository.GenreRepository    = repository.NewGenre(db)
 		filmRepository     repository.FilmRepository     = repository.NewFilm(db)
 		filmListRepository repository.FilmListRepository = repository.NewFilmList(db)
+		reviewRepository   repository.ReviewRepository   = repository.NewReview(db)
 
 		//=========== (SERVICE) ===========//
 		authService     service.AuthService     = service.NewAuth(userRepository, db)
 		userService     service.UserService     = service.NewUser(userRepository, db)
 		genreService    service.GenreService    = service.NewGenre(genreRepository, db)
 		filmService     service.FilmService     = service.NewFilm(filmRepository, genreRepository, db)
-		filmListService service.FilmListService = service.NewFilmList(filmListRepository, filmRepository, db)
+		filmListService service.FilmListService = service.NewFilmList(filmListRepository, filmRepository, reviewRepository, db)
+		reviewService   service.ReviewService   = service.NewReview(reviewRepository, filmRepository, db)
 
 		//=========== (CONTROLLER) ===========//
 		authController     controller.AuthController     = controller.NewAuth(authService)
@@ -47,6 +49,7 @@ func NewRest() RestConfig {
 		genreController    controller.GenreController    = controller.NewGenre(genreService)
 		filmController     controller.FilmController     = controller.NewFilm(filmService)
 		filmListController controller.FilmListController = controller.NewFilmList(filmListService)
+		reviewController   controller.ReviewController   = controller.NewReview(reviewService)
 	)
 
 	routes.Auth(server, authController, middleware)
@@ -54,6 +57,7 @@ func NewRest() RestConfig {
 	routes.Genre(server, genreController, middleware)
 	routes.Film(server, filmController, middleware)
 	routes.FilmList(server, filmListController, middleware)
+	routes.Review(server, reviewController, middleware)
 	return RestConfig{
 		server: server,
 	}

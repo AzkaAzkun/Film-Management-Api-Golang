@@ -24,6 +24,7 @@ func Migrate(db *gorm.DB) error {
 		entity.FilmGenre{},
 		entity.FilmImage{},
 		entity.FilmList{},
+		entity.Review{},
 	); err != nil {
 		return err
 	}

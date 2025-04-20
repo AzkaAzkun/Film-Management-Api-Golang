@@ -20,16 +20,19 @@ type (
 	filmListService struct {
 		filmListRepository repository.FilmListRepository
 		filmRepository     repository.FilmRepository
+		reviewRepository   repository.ReviewRepository
 		db                 *gorm.DB
 	}
 )
 
 func NewFilmList(filmListRepository repository.FilmListRepository,
 	filmRepository repository.FilmRepository,
+	reviewRepository repository.ReviewRepository,
 	db *gorm.DB) FilmListService {
 	return &filmListService{
 		filmListRepository: filmListRepository,
 		filmRepository:     filmRepository,
+		reviewRepository:   reviewRepository,
 		db:                 db,
 	}
 }
@@ -38,6 +41,15 @@ func (s *filmListService) Create(ctx context.Context, req dto.FilmListRequest, u
 	film, err := s.filmRepository.GetById(ctx, nil, req.FilmId)
 	if err != nil {
 		return err
+	}
+
+	review, err := s.reviewRepository.GetByFilmId(ctx, nil, film.ID.String())
+	if err != nil {
+		return err
+	}
+
+	if len(review) > 0 && req.ListStatus == string(entity.ListStatusPlanToWatch) {
+		return myerror.New("film has been review", http.StatusBadRequest)
 	}
 
 	if req.ListStatus != string(entity.ListStatusPlanToWatch) && film.AiringStatus == entity.NotYetAired {
