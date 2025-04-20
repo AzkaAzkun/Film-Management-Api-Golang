@@ -34,7 +34,7 @@ type User struct {
 	Timestamp
 }
 
-func (i *User) TableName() string {
+func (u *User) TableName() string {
 	return "us_users"
 }
 
