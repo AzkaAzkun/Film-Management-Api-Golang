@@ -4,7 +4,9 @@ import (
 	"context"
 	"film-management-api-golang/internal/dto"
 	"film-management-api-golang/internal/entity"
+	myerror "film-management-api-golang/internal/pkg/error"
 	"film-management-api-golang/internal/pkg/meta"
+	"net/http"
 
 	"gorm.io/gorm"
 )
@@ -14,6 +16,7 @@ type (
 		Create(ctx context.Context, tx *gorm.DB, genre entity.Genre) (entity.Genre, error)
 		GetById(ctx context.Context, tx *gorm.DB, genreId string) (entity.Genre, error)
 		GetByName(ctx context.Context, tx *gorm.DB, name string) (entity.Genre, error)
+		GetBatchById(ctx context.Context, tx *gorm.DB, ids []string) ([]entity.Genre, error)
 		GetAll(ctx context.Context, tx *gorm.DB) ([]dto.GenreResponse, error)
 		GetAllPaginated(ctx context.Context, tx *gorm.DB, metareq meta.Meta) (dto.GenreResponsePaginated, error)
 		Update(ctx context.Context, tx *gorm.DB, genre entity.Genre) (entity.Genre, error)
@@ -64,6 +67,23 @@ func (r *genreRepository) GetByName(ctx context.Context, tx *gorm.DB, name strin
 	}
 
 	return genre, nil
+}
+
+func (r *genreRepository) GetBatchById(ctx context.Context, tx *gorm.DB, ids []string) ([]entity.Genre, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var genres []entity.Genre
+	if err := tx.WithContext(ctx).Where("id IN ?", ids).Find(&genres).Error; err != nil {
+		return genres, err
+	}
+
+	if len(ids) != len(genres) {
+		return genres, myerror.New("genres return not same with id request", http.StatusBadRequest)
+	}
+
+	return genres, nil
 }
 
 func (r *genreRepository) GetAll(ctx context.Context, tx *gorm.DB) ([]dto.GenreResponse, error) {

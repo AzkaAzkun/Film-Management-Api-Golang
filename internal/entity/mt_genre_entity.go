@@ -10,5 +10,5 @@ type Genre struct {
 }
 
 func (g *Genre) TableName() string {
-	return "mt_genre"
+	return "mt_genres"
 }

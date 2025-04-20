@@ -29,20 +29,28 @@ func NewRest() RestConfig {
 		// mailerService mailer.Mailer         = mailer.New()
 
 		//=========== (REPOSITORY) ===========//
-		userRepository  repository.UserRepository  = repository.NewUser(db)
-		genreRepository repository.GenreRepository = repository.NewGenre(db)
+		userRepository     repository.UserRepository     = repository.NewUser(db)
+		genreRepository    repository.GenreRepository    = repository.NewGenre(db)
+		filmRepository     repository.FilmRepository     = repository.NewFilm(db)
+		filmListRepository repository.FilmListRepository = repository.NewFilmList(db)
 
 		//=========== (SERVICE) ===========//
-		authService  service.AuthService  = service.NewAuth(userRepository, db)
-		genreService service.GenreService = service.NewGenre(genreRepository, db)
+		authService     service.AuthService     = service.NewAuth(userRepository, db)
+		genreService    service.GenreService    = service.NewGenre(genreRepository, db)
+		filmService     service.FilmService     = service.NewFilm(filmRepository, genreRepository, db)
+		filmListService service.FilmListService = service.NewFilmList(filmListRepository, filmRepository, db)
 
 		//=========== (CONTROLLER) ===========//
-		authController  controller.AuthController  = controller.NewAuth(authService)
-		genreController controller.GenreController = controller.NewGenre(genreService)
+		authController     controller.AuthController     = controller.NewAuth(authService)
+		genreController    controller.GenreController    = controller.NewGenre(genreService)
+		filmController     controller.FilmController     = controller.NewFilm(filmService)
+		filmListController controller.FilmListController = controller.NewFilmList(filmListService)
 	)
 
 	routes.Auth(server, authController, middleware)
 	routes.Genre(server, genreController, middleware)
+	routes.Film(server, filmController, middleware)
+	routes.FilmList(server, filmListController, middleware)
 	return RestConfig{
 		server: server,
 	}

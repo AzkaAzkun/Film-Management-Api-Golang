@@ -20,6 +20,10 @@ func Migrate(db *gorm.DB) error {
 	if err := db.AutoMigrate(
 		entity.User{},
 		entity.Genre{},
+		entity.Film{},
+		entity.FilmGenre{},
+		entity.FilmImage{},
+		entity.FilmList{},
 	); err != nil {
 		return err
 	}
