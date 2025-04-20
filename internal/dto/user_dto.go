@@ -16,4 +16,12 @@ type (
 		DisplayName string `json:"display_name"`
 		Bio         string `json:"bio"`
 	}
+
+	UserResponse struct {
+		ID          string             `json:"id"`
+		Username    string             `json:"username"`
+		DisplayName string             `json:"display_name"`
+		Bio         string             `json:"bio"`
+		FilmLists   []FilmListResponse `json:"film_lists"`
+	}
 )

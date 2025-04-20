@@ -11,6 +11,7 @@ type (
 	UserRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, user entity.User) (entity.User, error)
 		GetById(ctx context.Context, tx *gorm.DB, userId string) (entity.User, error)
+		GetByIdWithFilmList(ctx context.Context, tx *gorm.DB, userId string) (entity.User, error)
 		GetByEmail(ctx context.Context, tx *gorm.DB, email string) (entity.User, error)
 		Update(ctx context.Context, tx *gorm.DB, user entity.User) (entity.User, error)
 	}
@@ -43,6 +44,21 @@ func (r *userRepository) GetById(ctx context.Context, tx *gorm.DB, userId string
 
 	var user entity.User
 	if err := tx.WithContext(ctx).Take(&user, "id = ?", userId).Error; err != nil {
+		return entity.User{}, err
+	}
+
+	return user, nil
+}
+
+func (r *userRepository) GetByIdWithFilmList(ctx context.Context, tx *gorm.DB, userId string) (entity.User, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var user entity.User
+	if err := tx.WithContext(ctx).Preload("FilmLists", func(tx *gorm.DB) *gorm.DB {
+		return tx.Where("visibility = ?", "public")
+	}).Preload("FilmLists.Film").Take(&user, "id = ?", userId).Error; err != nil {
 		return entity.User{}, err
 	}
 

@@ -27,6 +27,8 @@ type FilmList struct {
 	ListStatus ListStatus `json:"list_status"`
 	Visibility Visibility `json:"visibility"`
 
+	Film *Film `json:"film" gorm:"foreignKey:FilmId"`
+
 	Timestamp
 }
 

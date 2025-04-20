@@ -36,18 +36,21 @@ func NewRest() RestConfig {
 
 		//=========== (SERVICE) ===========//
 		authService     service.AuthService     = service.NewAuth(userRepository, db)
+		userService     service.UserService     = service.NewUser(userRepository, db)
 		genreService    service.GenreService    = service.NewGenre(genreRepository, db)
 		filmService     service.FilmService     = service.NewFilm(filmRepository, genreRepository, db)
 		filmListService service.FilmListService = service.NewFilmList(filmListRepository, filmRepository, db)
 
 		//=========== (CONTROLLER) ===========//
 		authController     controller.AuthController     = controller.NewAuth(authService)
+		userController     controller.UserController     = controller.NewUser(userService)
 		genreController    controller.GenreController    = controller.NewGenre(genreService)
 		filmController     controller.FilmController     = controller.NewFilm(filmService)
 		filmListController controller.FilmListController = controller.NewFilmList(filmListService)
 	)
 
 	routes.Auth(server, authController, middleware)
+	routes.User(server, userController, middleware)
 	routes.Genre(server, genreController, middleware)
 	routes.Film(server, filmController, middleware)
 	routes.FilmList(server, filmListController, middleware)

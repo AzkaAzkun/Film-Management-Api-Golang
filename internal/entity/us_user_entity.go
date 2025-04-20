@@ -31,6 +31,8 @@ type User struct {
 	Bio         string    `json:"bio"`
 	Role        UserRole  `json:"role"`
 
+	FilmLists []FilmList `json:"film_lists" gorm:"foreignKey:UserId"`
+
 	Timestamp
 }
 

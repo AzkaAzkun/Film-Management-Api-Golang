@@ -24,9 +24,9 @@ type (
 	}
 )
 
-func NewGenre(repo service.GenreService) GenreController {
+func NewGenre(genreService service.GenreService) GenreController {
 	return &genreController{
-		genreService: repo,
+		genreService: genreService,
 	}
 }
 
