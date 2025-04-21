@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"math"
 	"strings"
 )
 
@@ -23,4 +24,8 @@ func ToSlug(s string) string {
 	}
 
 	return b.String()
+}
+
+func roundToTwoDecimal(val float64) float32 {
+	return float32(math.Round(val*100) / 100)
 }

@@ -13,5 +13,6 @@ func Film(app *gin.Engine, filmcontroller controller.FilmController, middleware 
 	{
 		routes.POST("", middleware.Authenticate(), middleware.OnlyAllow(string(entity.RoleAdmin)), filmcontroller.Create)
 		routes.GET("", filmcontroller.GetListFilm)
+		routes.GET("/:id", filmcontroller.GetDetailFilm)
 	}
 }

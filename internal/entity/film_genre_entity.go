@@ -7,6 +7,8 @@ type FilmGenre struct {
 	FilmId  uuid.UUID `json:"film_id"`
 	GenreId uuid.UUID `json:"genre_id"`
 
+	Genre *Genre `gorm:"foreignKey:GenreId"`
+
 	Timestamp
 }
 

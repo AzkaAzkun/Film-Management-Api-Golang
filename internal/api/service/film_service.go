@@ -18,6 +18,7 @@ type (
 	FilmService interface {
 		Create(ctx context.Context, req dto.FilmCreateRequest) (dto.FilmCreateResponse, error)
 		GetListFilm(ctx context.Context, metareq meta.Meta) (dto.GetAllFilmPaginatedResponse, error)
+		GetDetailFilm(ctx context.Context, filmId string) (dto.GetDetailFilmResponse, error)
 	}
 
 	filmService struct {
@@ -88,4 +89,36 @@ func (s *filmService) GetListFilm(ctx context.Context, metareq meta.Meta) (dto.G
 	}
 
 	return data, err
+}
+
+func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.GetDetailFilmResponse, error) {
+	data, err := s.filmRepository.GetDetailFilm(ctx, nil, filmId)
+	if err != nil {
+		return dto.GetDetailFilmResponse{}, err
+	}
+
+	var imagespath []string
+	for _, image := range data.Images {
+		imagespath = append(imagespath, image.ImagePath)
+	}
+
+	var genreresponse []dto.GenreResponse
+	for _, genre := range data.Genres {
+		genreresponse = append(genreresponse, dto.GenreResponse{
+			ID:   genre.Genre.ID.String(),
+			Name: genre.Genre.Name,
+		})
+	}
+
+	return dto.GetDetailFilmResponse{
+		ID:            data.ID,
+		Title:         data.Title,
+		Synopsis:      data.Synopsis,
+		AiringStatus:  data.AiringStatus,
+		TotalEpisodes: data.TotalEpisodes,
+		ReleaseDate:   data.ReleaseDate.Format("2006-01-02 15:04:05"),
+		Images:        imagespath,
+		Genres:        genreresponse,
+		AverageRating: data.AverageRating,
+	}, nil
 }

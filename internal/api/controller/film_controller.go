@@ -15,6 +15,7 @@ type (
 	FilmController interface {
 		Create(ctx *gin.Context)
 		GetListFilm(ctx *gin.Context)
+		GetDetailFilm(ctx *gin.Context)
 	}
 
 	filmController struct {
@@ -55,4 +56,15 @@ func (c *filmController) GetListFilm(ctx *gin.Context) {
 	}
 
 	response.NewSuccess("success get list film", result.Data, result.Meta).Send(ctx)
+}
+
+func (c *filmController) GetDetailFilm(ctx *gin.Context) {
+	filmId := ctx.Param("id")
+	result, err := c.filmService.GetDetailFilm(ctx, filmId)
+	if err != nil {
+		response.NewFailed("failed get detail film", err).Send(ctx)
+		return
+	}
+
+	response.NewSuccess("success get detail film", result).Send(ctx)
 }
