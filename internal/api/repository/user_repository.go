@@ -58,7 +58,7 @@ func (r *userRepository) GetByIdWithFilmList(ctx context.Context, tx *gorm.DB, u
 	var user entity.User
 	if err := tx.WithContext(ctx).Preload("FilmLists", func(tx *gorm.DB) *gorm.DB {
 		return tx.Where("visibility = ?", "public")
-	}).Preload("FilmLists.Film").Take(&user, "id = ?", userId).Error; err != nil {
+	}).Preload("FilmLists.Film").Preload("Reviews").Preload("Reviews.Film").Take(&user, "id = ?", userId).Error; err != nil {
 		return entity.User{}, err
 	}
 

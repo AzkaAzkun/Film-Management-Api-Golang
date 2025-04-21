@@ -41,11 +41,21 @@ func (s *userService) GetById(ctx context.Context, userId string) (dto.UserRespo
 		})
 	}
 
+	var reviewResponse []dto.ReviewResponse
+	for _, review := range user.Reviews {
+		reviewResponse = append(reviewResponse, dto.ReviewResponse{
+			Film:    review.Film.Title,
+			Rating:  review.Rating,
+			Comment: review.Comment,
+		})
+	}
+
 	return dto.UserResponse{
 		ID:          user.ID.String(),
 		Username:    user.Username,
 		DisplayName: user.DisplayName,
 		Bio:         user.Bio,
 		FilmLists:   filmLists,
+		Reviews:     reviewResponse,
 	}, nil
 }

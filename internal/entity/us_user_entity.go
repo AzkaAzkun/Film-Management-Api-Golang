@@ -32,6 +32,7 @@ type User struct {
 	Role        UserRole  `json:"role"`
 
 	FilmLists []FilmList `json:"film_lists" gorm:"foreignKey:UserId"`
+	Reviews   []Review   `json:"reviews" gorm:"foreignKey:UserId"`
 
 	Timestamp
 }
