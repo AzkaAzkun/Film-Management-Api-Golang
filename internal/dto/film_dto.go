@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"film-management-api-golang/internal/pkg/meta"
 	"mime/multipart"
 	"time"
 )
@@ -18,5 +19,18 @@ type (
 
 	FilmCreateResponse struct {
 		ID string `json:"id"`
+	}
+
+	GetAllFilmResponse struct {
+		Title         string  `json:"title"`
+		AiringStatus  string  `json:"airing_status"`
+		TotalEpisodes int     `json:"total_episodes"`
+		ReleaseDate   string  `json:"release_date"`
+		AverageRating float32 `json:"average_rating"`
+	}
+
+	GetAllFilmPaginatedResponse struct {
+		Data []GetAllFilmResponse
+		Meta meta.Meta
 	}
 )

@@ -4,6 +4,7 @@ import (
 	"film-management-api-golang/internal/api/service"
 	"film-management-api-golang/internal/dto"
 	myerror "film-management-api-golang/internal/pkg/error"
+	"film-management-api-golang/internal/pkg/meta"
 	"film-management-api-golang/internal/pkg/response"
 	"net/http"
 
@@ -13,6 +14,7 @@ import (
 type (
 	FilmController interface {
 		Create(ctx *gin.Context)
+		GetListFilm(ctx *gin.Context)
 	}
 
 	filmController struct {
@@ -43,4 +45,14 @@ func (c *filmController) Create(ctx *gin.Context) {
 	}
 
 	response.NewSuccess("success create new film", result).Send(ctx)
+}
+
+func (c *filmController) GetListFilm(ctx *gin.Context) {
+	result, err := c.filmService.GetListFilm(ctx, meta.New(ctx))
+	if err != nil {
+		response.NewFailed("failed get list film", err).Send(ctx)
+		return
+	}
+
+	response.NewSuccess("success get list film", result.Data, result.Meta).Send(ctx)
 }

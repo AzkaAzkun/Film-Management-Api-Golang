@@ -12,5 +12,6 @@ func Film(app *gin.Engine, filmcontroller controller.FilmController, middleware 
 	routes := app.Group("/api/v1/films")
 	{
 		routes.POST("", middleware.Authenticate(), middleware.OnlyAllow(string(entity.RoleAdmin)), filmcontroller.Create)
+		routes.GET("", filmcontroller.GetListFilm)
 	}
 }

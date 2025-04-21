@@ -5,6 +5,7 @@ import (
 	"film-management-api-golang/internal/api/repository"
 	"film-management-api-golang/internal/dto"
 	"film-management-api-golang/internal/entity"
+	"film-management-api-golang/internal/pkg/meta"
 	"film-management-api-golang/internal/utils"
 	"fmt"
 	"strings"
@@ -16,6 +17,7 @@ import (
 type (
 	FilmService interface {
 		Create(ctx context.Context, req dto.FilmCreateRequest) (dto.FilmCreateResponse, error)
+		GetListFilm(ctx context.Context, metareq meta.Meta) (dto.GetAllFilmPaginatedResponse, error)
 	}
 
 	filmService struct {
@@ -77,4 +79,13 @@ func (s *filmService) Create(ctx context.Context, req dto.FilmCreateRequest) (dt
 	return dto.FilmCreateResponse{
 		ID: createResult.ID.String(),
 	}, nil
+}
+
+func (s *filmService) GetListFilm(ctx context.Context, metareq meta.Meta) (dto.GetAllFilmPaginatedResponse, error) {
+	data, err := s.filmRepository.GetAllPaginated(ctx, nil, metareq)
+	if err != nil {
+		return dto.GetAllFilmPaginatedResponse{}, err
+	}
+
+	return data, err
 }

@@ -22,8 +22,9 @@ type Film struct {
 	TotalEpisodes int          `json:"total_episodes"`
 	ReleaseDate   time.Time    `json:"release_date"`
 
-	Images []FilmImage `json:"images" gorm:"foreignKey:FilmId"`
-	Genres []FilmGenre `json:"genres" gorm:"foreignKey:FilmId"`
+	Images  []FilmImage `json:"images" gorm:"foreignKey:FilmId"`
+	Genres  []FilmGenre `json:"genres" gorm:"foreignKey:FilmId"`
+	Reviews []Review    `json:"reviews"  gorm:"foreignKey:FilmId"`
 
 	Timestamp
 }
