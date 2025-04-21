@@ -15,6 +15,7 @@ import (
 type (
 	FilmListService interface {
 		Create(ctx context.Context, req dto.FilmListRequest, userId string) error
+		UpdateVisibility(ctx context.Context, req dto.FilmListVisibilityRequest, filmlistId string) error
 	}
 
 	filmListService struct {
@@ -64,4 +65,20 @@ func (s *filmListService) Create(ctx context.Context, req dto.FilmListRequest, u
 	})
 
 	return err
+}
+
+func (s *filmListService) UpdateVisibility(ctx context.Context, req dto.FilmListVisibilityRequest, filmlistId string) error {
+	filmlist, err := s.filmListRepository.GetById(ctx, nil, filmlistId)
+	if err != nil {
+		return err
+	}
+
+	filmlist.Visibility = entity.Visibility(req.Visibility)
+
+	_, err = s.filmListRepository.Update(ctx, nil, filmlist)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

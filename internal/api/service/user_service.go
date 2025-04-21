@@ -36,6 +36,7 @@ func (s *userService) GetById(ctx context.Context, userId string) (dto.UserRespo
 	var filmLists []dto.FilmListResponse
 	for _, filmlist := range user.FilmLists {
 		filmLists = append(filmLists, dto.FilmListResponse{
+			ID:         filmlist.ID.String(),
 			FilmTitle:  filmlist.Film.Title,
 			ListStatus: string(filmlist.ListStatus),
 		})

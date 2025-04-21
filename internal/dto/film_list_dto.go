@@ -7,7 +7,12 @@ type (
 	}
 
 	FilmListResponse struct {
+		ID         string `json:"id"`
 		FilmTitle  string `json:"film_title"`
 		ListStatus string `json:"list_status"`
+	}
+
+	FilmListVisibilityRequest struct {
+		Visibility string `json:"visibility"`
 	}
 )

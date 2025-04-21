@@ -11,5 +11,6 @@ func FilmList(app *gin.Engine, filmlistcontroller controller.FilmListController,
 	routes := app.Group("/api/v1/film-lists")
 	{
 		routes.POST("", middleware.Authenticate(), filmlistcontroller.Create)
+		routes.PATCH("/:id", middleware.Authenticate(), filmlistcontroller.UpdateVisibility)
 	}
 }

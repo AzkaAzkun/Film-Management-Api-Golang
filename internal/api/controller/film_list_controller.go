@@ -13,6 +13,7 @@ import (
 type (
 	FilmListController interface {
 		Create(ctx *gin.Context)
+		UpdateVisibility(ctx *gin.Context)
 	}
 
 	filmListController struct {
@@ -45,4 +46,20 @@ func (c *filmListController) Create(ctx *gin.Context) {
 	}
 
 	response.NewSuccess("success create film list", nil).Send(ctx)
+}
+
+func (c *filmListController) UpdateVisibility(ctx *gin.Context) {
+	var req dto.FilmListVisibilityRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		response.NewFailed("invalid input data", myerror.ErrBodyRequest).Send(ctx)
+		return
+	}
+
+	filmlistId := ctx.Param("id")
+	if err := c.filmlistService.UpdateVisibility(ctx, req, filmlistId); err != nil {
+		response.NewFailed("failed update film list", err).Send(ctx)
+		return
+	}
+
+	response.NewSuccess("success update film list", nil).Send(ctx)
 }
