@@ -41,15 +41,15 @@ func (s *authService) Register(ctx context.Context, req dto.RegisterRequest) (dt
 		return dto.RegisterResponse{}, myerror.New("user with this email already exist", http.StatusConflict)
 	}
 
-	hashPassword, err := utils.HashPassword(req.Password)
-	if err != nil {
-		return dto.RegisterResponse{}, err
-	}
+	// hashPassword, err := utils.HashPassword(req.Password)
+	// if err != nil {
+	// 	return dto.RegisterResponse{}, err
+	// }
 
 	createResult, err := s.userRepository.Create(ctx, nil, entity.User{
 		Username:    req.Username,
 		Email:       req.Email,
-		Password:    hashPassword,
+		Password:    req.Password,
 		DisplayName: req.DisplayName,
 		Bio:         req.Bio,
 		Role:        entity.RoleUser,

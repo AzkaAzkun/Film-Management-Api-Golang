@@ -43,7 +43,7 @@ func (c *authController) Register(ctx *gin.Context) {
 		return
 	}
 
-	response.NewSuccess("failed register account", user).Send(ctx)
+	response.NewSuccess("success register account", user).Send(ctx)
 }
 
 func (c *authController) Login(ctx *gin.Context) {

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"film-management-api-golang/internal/entity"
+	mylog "film-management-api-golang/internal/pkg/logger"
 
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ func NewUser(db *gorm.DB) UserRepository {
 }
 
 func (r *userRepository) Create(ctx context.Context, tx *gorm.DB, user entity.User) (entity.User, error) {
+	mylog.Infoln(user)
 	if tx == nil {
 		tx = r.db
 	}
@@ -33,7 +35,7 @@ func (r *userRepository) Create(ctx context.Context, tx *gorm.DB, user entity.Us
 	if err := tx.WithContext(ctx).Create(&user).Error; err != nil {
 		return user, err
 	}
-
+mylog.Infoln(user)
 	return user, nil
 }
 

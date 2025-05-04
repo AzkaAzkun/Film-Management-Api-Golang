@@ -56,17 +56,17 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-func (u *User) BeforeSave(tx *gorm.DB) error {
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
+// func (u *User) BeforeSave(tx *gorm.DB) error {
+// 	defer func() {
+// 		if r := recover(); r != nil {
+// 			tx.Rollback()
+// 		}
+// 	}()
 
-	var err error
-	u.Password, err = utils.HashPassword(u.Password)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// 	var err error
+// 	u.Password, err = utils.HashPassword(u.Password)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
