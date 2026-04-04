@@ -110,6 +110,18 @@ func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.Get
 		})
 	}
 
+	var reviewresponse []dto.FilmReviewResponse
+	for _, review := range data.Reviews {
+		reviewresponse = append(reviewresponse, dto.FilmReviewResponse{
+			ID:       review.ID.String(),
+			UserId:   review.UserId.String(),
+			Rating:   review.Rating,
+			Comment:  review.Comment,
+			Likes:    review.Likes,
+			Dislikes: review.Dislikes,
+		})
+	}
+
 	return dto.GetDetailFilmResponse{
 		ID:            data.ID,
 		Title:         data.Title,
@@ -119,6 +131,7 @@ func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.Get
 		ReleaseDate:   data.ReleaseDate.Format("2006-01-02 15:04:05"),
 		Images:        imagespath,
 		Genres:        genreresponse,
+		Reviews:       reviewresponse,
 		AverageRating: data.AverageRating,
 	}, nil
 }

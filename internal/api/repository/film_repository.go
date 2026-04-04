@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"film-management-api-golang/internal/dto"
 	"film-management-api-golang/internal/entity"
 	"film-management-api-golang/internal/pkg/meta"
@@ -94,8 +95,8 @@ func (r *filmRepository) GetDetailFilm(ctx context.Context, tx *gorm.DB, filmId 
 		Where("films.id = ?", filmId).
 		Preload("Images").
 		Preload("Genres.Genre").
+		Preload("Reviews").
 		First(&film).Error
-
 	if err != nil {
 		return dto.GetDetailFilm{}, err
 	}
@@ -109,6 +110,7 @@ func (r *filmRepository) GetDetailFilm(ctx context.Context, tx *gorm.DB, filmId 
 		ReleaseDate:   film.ReleaseDate,
 		Images:        film.Images,
 		Genres:        film.Genres,
+		Reviews:       film.Reviews,
 		AverageRating: film.AverageRating,
 	}
 

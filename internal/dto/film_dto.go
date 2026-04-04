@@ -45,19 +45,30 @@ type (
 		ReleaseDate   time.Time          `json:"release_date"`
 		Images        []entity.FilmImage `json:"images"`
 		Genres        []entity.FilmGenre `json:"genres"`
+		Reviews       []entity.Review    `json:"reviews"`
 		AverageRating float32            `json:"average_rating"`
 	}
 
+	FilmReviewResponse struct {
+		ID       string `json:"id"`
+		UserId   string `json:"user_id"`
+		Rating   int    `json:"rating"`
+		Comment  string `json:"comment"`
+		Likes    int    `json:"likes"`
+		Dislikes int    `json:"dislikes"`
+	}
+
 	GetDetailFilmResponse struct {
-		ID            string          `json:"id"`
-		Title         string          `json:"title"`
-		Synopsis      string          `json:"synopsis"`
-		AiringStatus  string          `json:"airing_status"`
-		TotalEpisodes int             `json:"total_episodes"`
-		ReleaseDate   string          `json:"release_date"`
-		Images        []string        `json:"images"`
-		Genres        []GenreResponse `json:"genres"`
-		AverageRating float32         `json:"average_rating"`
+		ID            string               `json:"id"`
+		Title         string               `json:"title"`
+		Synopsis      string               `json:"synopsis"`
+		AiringStatus  string               `json:"airing_status"`
+		TotalEpisodes int                  `json:"total_episodes"`
+		ReleaseDate   string               `json:"release_date"`
+		Images        []string             `json:"images"`
+		Genres        []GenreResponse      `json:"genres"`
+		Reviews       []FilmReviewResponse `json:"reviews"`
+		AverageRating float32              `json:"average_rating"`
 	}
 
 	FilmWithRating struct {

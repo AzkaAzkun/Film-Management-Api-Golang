@@ -2,9 +2,13 @@ package service
 
 import (
 	"context"
+	"errors"
+	"net/http"
+
 	"film-management-api-golang/internal/api/repository"
 	"film-management-api-golang/internal/dto"
 	"film-management-api-golang/internal/entity"
+	myerror "film-management-api-golang/internal/pkg/error"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -36,6 +40,14 @@ func NewReaction(reactionRepository repository.ReactionRepository,
 func (s *reactionService) Create(ctx context.Context, req dto.ReactionRequest, userId string) error {
 	review, err := s.reviewRepository.GetById(ctx, nil, req.ReviewId)
 	if err != nil {
+		return err
+	}
+
+	_, err = s.reactionRepository.GetByReviewAndUser(ctx, nil, req.ReviewId, userId)
+	if err == nil {
+		return myerror.New("user has already reacted to this review", http.StatusConflict)
+	}
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return err
 	}
 

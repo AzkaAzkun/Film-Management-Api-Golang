@@ -11,6 +11,7 @@ type (
 	ReactionRepository interface {
 		Create(ctx context.Context, tx *gorm.DB, reaction entity.Reaction) (entity.Reaction, error)
 		GetById(ctx context.Context, tx *gorm.DB, reactionId string) (entity.Reaction, error)
+		GetByReviewAndUser(ctx context.Context, tx *gorm.DB, reviewId string, userId string) (entity.Reaction, error)
 		Update(ctx context.Context, tx *gorm.DB, reaction entity.Reaction) (entity.Reaction, error)
 	}
 
@@ -42,6 +43,19 @@ func (r *reactionRepository) GetById(ctx context.Context, tx *gorm.DB, reactionI
 
 	var reaction entity.Reaction
 	if err := tx.WithContext(ctx).Where("id = ?", reactionId).Take(&reaction).Error; err != nil {
+		return reaction, err
+	}
+
+	return reaction, nil
+}
+
+func (r *reactionRepository) GetByReviewAndUser(ctx context.Context, tx *gorm.DB, reviewId string, userId string) (entity.Reaction, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var reaction entity.Reaction
+	if err := tx.WithContext(ctx).Where("review_id = ? AND user_id = ?", reviewId, userId).Take(&reaction).Error; err != nil {
 		return reaction, err
 	}
 
