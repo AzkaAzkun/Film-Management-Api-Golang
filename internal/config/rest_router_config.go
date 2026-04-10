@@ -1,13 +1,14 @@
 package config
 
 import (
-	"film-management-api-golang/internal/middleware"
-	mylog "film-management-api-golang/internal/pkg/logger"
-	"film-management-api-golang/internal/pkg/response"
 	"fmt"
 	"net/http"
 	"os"
 	"runtime/debug"
+
+	"film-management-api-golang/internal/middleware"
+	mylog "film-management-api-golang/internal/pkg/logger"
+	"film-management-api-golang/internal/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,8 @@ func NewRouter(server *gin.Engine) *gin.Engine {
 			"message": "pong pong",
 		})
 	})
+
+	server.Static("/api/static", "./assets/")
 
 	return server
 }
