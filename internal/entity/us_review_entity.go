@@ -12,6 +12,8 @@ type Review struct {
 	Likes    int    `json:"likes"`
 	Dislikes int    `json:"dislikes"`
 
+	User User `gorm:"foreignKey:UserId"`
+
 	Film *Film `gorm:"foreignKey:FilmId"`
 
 	Reactions []Reaction `json:"reactions" gorm:"foreignKey:ReviewId"`

@@ -11,9 +11,10 @@ type (
 	}
 
 	ReactionResponse struct {
-		ID       string `json:"id"`
-		ReviewId string `json:"review_id"`
-		UserId   string `json:"user_id"`
-		Status   string `json:"status"`
+		ID       string       `json:"id"`
+		ReviewId string       `json:"review_id"`
+		UserId   string       `json:"user_id"`
+		Status   string       `json:"status"`
+		User     UserResponse `json:"user"`
 	}
 )
