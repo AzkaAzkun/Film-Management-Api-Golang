@@ -119,7 +119,17 @@ func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.Get
 				ReviewId: reaction.ReviewId.String(),
 				UserId:   reaction.UserId.String(),
 				Status:   string(reaction.Status),
+				User: dto.UserResponse{
+					ID:          reaction.User.ID.String(),
+					Username:    reaction.User.Username,
+					DisplayName: reaction.User.DisplayName,
+					Bio:         reaction.User.Bio,
+				},
 			})
+		}
+
+		if reactionresponse == nil {
+			reactionresponse = []dto.ReactionResponse{}
 		}
 
 		reviewresponse = append(reviewresponse, dto.FilmReviewResponse{
@@ -130,7 +140,17 @@ func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.Get
 			Likes:     review.Likes,
 			Dislikes:  review.Dislikes,
 			Reactions: reactionresponse,
+			User: dto.UserResponse{
+				ID:          review.User.ID.String(),
+				Username:    review.User.Username,
+				DisplayName: review.User.DisplayName,
+				Bio:         review.User.Bio,
+			},
 		})
+	}
+
+	if reviewresponse == nil {
+		reviewresponse = []dto.FilmReviewResponse{}
 	}
 
 	return dto.GetDetailFilmResponse{

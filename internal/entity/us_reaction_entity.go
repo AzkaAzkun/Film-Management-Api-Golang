@@ -16,6 +16,8 @@ type Reaction struct {
 
 	Status ReactionStatus `json:"status"`
 
+	User User `gorm:"foreignKey:UserId"`
+
 	Timestamp
 }
 

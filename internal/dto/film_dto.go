@@ -57,6 +57,7 @@ type (
 		Likes     int                `json:"likes"`
 		Dislikes  int                `json:"dislikes"`
 		Reactions []ReactionResponse `json:"reactions"`
+		User      UserResponse       `json:"user"`
 	}
 
 	GetDetailFilmResponse struct {
