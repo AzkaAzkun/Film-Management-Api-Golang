@@ -112,13 +112,24 @@ func (s *filmService) GetDetailFilm(ctx context.Context, filmId string) (dto.Get
 
 	var reviewresponse []dto.FilmReviewResponse
 	for _, review := range data.Reviews {
+		var reactionresponse []dto.ReactionResponse
+		for _, reaction := range review.Reactions {
+			reactionresponse = append(reactionresponse, dto.ReactionResponse{
+				ID:       reaction.ID.String(),
+				ReviewId: reaction.ReviewId.String(),
+				UserId:   reaction.UserId.String(),
+				Status:   string(reaction.Status),
+			})
+		}
+
 		reviewresponse = append(reviewresponse, dto.FilmReviewResponse{
-			ID:       review.ID.String(),
-			UserId:   review.UserId.String(),
-			Rating:   review.Rating,
-			Comment:  review.Comment,
-			Likes:    review.Likes,
-			Dislikes: review.Dislikes,
+			ID:        review.ID.String(),
+			UserId:    review.UserId.String(),
+			Rating:    review.Rating,
+			Comment:   review.Comment,
+			Likes:     review.Likes,
+			Dislikes:  review.Dislikes,
+			Reactions: reactionresponse,
 		})
 	}
 
