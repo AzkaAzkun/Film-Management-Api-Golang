@@ -95,7 +95,7 @@ func (r *filmRepository) GetDetailFilm(ctx context.Context, tx *gorm.DB, filmId 
 		Where("films.id = ?", filmId).
 		Preload("Images").
 		Preload("Genres.Genre").
-		Preload("Reviews").
+		Preload("Reviews.Reactions").
 		First(&film).Error
 	if err != nil {
 		return dto.GetDetailFilm{}, err

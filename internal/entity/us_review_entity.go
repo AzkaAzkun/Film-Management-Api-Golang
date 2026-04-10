@@ -14,6 +14,8 @@ type Review struct {
 
 	Film *Film `gorm:"foreignKey:FilmId"`
 
+	Reactions []Reaction `json:"reactions" gorm:"foreignKey:ReviewId"`
+
 	Timestamp
 }
 

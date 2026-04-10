@@ -50,12 +50,13 @@ type (
 	}
 
 	FilmReviewResponse struct {
-		ID       string `json:"id"`
-		UserId   string `json:"user_id"`
-		Rating   int    `json:"rating"`
-		Comment  string `json:"comment"`
-		Likes    int    `json:"likes"`
-		Dislikes int    `json:"dislikes"`
+		ID        string             `json:"id"`
+		UserId    string             `json:"user_id"`
+		Rating    int                `json:"rating"`
+		Comment   string             `json:"comment"`
+		Likes     int                `json:"likes"`
+		Dislikes  int                `json:"dislikes"`
+		Reactions []ReactionResponse `json:"reactions"`
 	}
 
 	GetDetailFilmResponse struct {
