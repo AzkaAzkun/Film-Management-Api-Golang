@@ -1,10 +1,11 @@
 package dto
 
 import (
-	"film-management-api-golang/internal/entity"
-	"film-management-api-golang/internal/pkg/meta"
 	"mime/multipart"
 	"time"
+
+	"film-management-api-golang/internal/entity"
+	"film-management-api-golang/internal/pkg/meta"
 )
 
 type (
@@ -23,12 +24,13 @@ type (
 	}
 
 	GetAllFilmResponse struct {
-		ID            string  `json:"id"`
-		Title         string  `json:"title"`
-		AiringStatus  string  `json:"airing_status"`
-		TotalEpisodes int     `json:"total_episodes"`
-		ReleaseDate   string  `json:"release_date"`
-		AverageRating float32 `json:"average_rating"`
+		ID            string   `json:"id"`
+		Title         string   `json:"title"`
+		AiringStatus  string   `json:"airing_status"`
+		TotalEpisodes int      `json:"total_episodes"`
+		ReleaseDate   string   `json:"release_date"`
+		AverageRating float32  `json:"average_rating"`
+		Images        []string `json:"images"`
 	}
 
 	GetAllFilmPaginatedResponse struct {

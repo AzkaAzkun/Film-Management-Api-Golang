@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
+	"fmt"
+	"strings"
+
 	"film-management-api-golang/internal/api/repository"
 	"film-management-api-golang/internal/dto"
 	"film-management-api-golang/internal/entity"
 	"film-management-api-golang/internal/pkg/meta"
 	"film-management-api-golang/internal/utils"
-	"fmt"
-	"strings"
 
 	"github.com/oklog/ulid/v2"
 	"gorm.io/gorm"
@@ -30,7 +31,8 @@ type (
 
 func NewFilm(filmRepository repository.FilmRepository,
 	genreRepository repository.GenreRepository,
-	db *gorm.DB) FilmService {
+	db *gorm.DB,
+) FilmService {
 	return &filmService{
 		filmRepository:  filmRepository,
 		genreRepository: genreRepository,

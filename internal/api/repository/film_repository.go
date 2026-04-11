@@ -59,21 +59,50 @@ func (r *filmRepository) GetAllPaginated(ctx context.Context, tx *gorm.DB, metar
 		tx = r.db
 	}
 
-	var result []dto.GetAllFilmResponse
+	type filmWithRating struct {
+		entity.Film
+		AverageRating float32 `json:"average_rating"`
+	}
+
+	var films []filmWithRating
 	query := tx.WithContext(ctx).Model(&entity.Film{})
 	query = WithFilters(query, &metareq, AddModels(entity.Film{}))
 	subQuery := r.db.
 		Select("film_id, ROUND(AVG(rating)::numeric, 2) as average_rating").
 		Table("us_reviews").
 		Group("film_id")
-	query = query.
+	err := query.
 		Select("films.*, avg_ratings.average_rating").
-		Joins("LEFT JOIN (?) as avg_ratings ON avg_ratings.film_id::uuid = films.id", subQuery).Scan(&result)
+		Joins("LEFT JOIN (?) as avg_ratings ON avg_ratings.film_id::uuid = films.id", subQuery).
+		Preload("Images").
+		Find(&films).Error
+	if err != nil {
+		return dto.GetAllFilmPaginatedResponse{}, err
+	}
+
+	result := make([]dto.GetAllFilmResponse, 0, len(films))
+	for _, f := range films {
+
+		images := make([]string, 0, len(f.Images))
+		for _, img := range f.Images {
+			images = append(images, img.ImagePath)
+		}
+
+		result = append(result, dto.GetAllFilmResponse{
+			ID:            f.ID.String(),
+			Title:         f.Title,
+			AiringStatus:  string(f.AiringStatus),
+			TotalEpisodes: f.TotalEpisodes,
+			ReleaseDate:   f.ReleaseDate.String(),
+			AverageRating: f.AverageRating,
+			Images:        images,
+		})
+	}
 
 	return dto.GetAllFilmPaginatedResponse{
 		Data: result,
 		Meta: metareq,
-	}, query.Error
+	}, nil
 }
 
 func (r *filmRepository) GetDetailFilm(ctx context.Context, tx *gorm.DB, filmId string) (dto.GetDetailFilm, error) {
