@@ -10,6 +10,7 @@ type (
 		ID         string `json:"id"`
 		FilmTitle  string `json:"film_title"`
 		ListStatus string `json:"list_status"`
+		Visibility string `json:"visibility"`
 	}
 
 	FilmListVisibilityRequest struct {

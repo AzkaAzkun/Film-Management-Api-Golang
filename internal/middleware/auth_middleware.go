@@ -78,3 +78,28 @@ func (m Middleware) Authenticate() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+func (m Middleware) AuthenticateOptional() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		authHeader := ctx.GetHeader("Authorization")
+		if authHeader == "" || !strings.Contains(authHeader, "Bearer ") {
+			ctx.Next()
+			return
+		}
+
+		authHeader = strings.Replace(authHeader, "Bearer ", "", -1)
+
+		idToken, err := myjwt.GetPayloadInsideToken(authHeader)
+		if err != nil {
+			ctx.Next()
+			return
+		}
+
+		ctx.Set("token", authHeader)
+		ctx.Set("payload", idToken)
+		ctx.Set("user_id", idToken["user_id"])
+		ctx.Set("email", idToken["email"])
+		ctx.Set("role", idToken["role"])
+		ctx.Next()
+	}
+}

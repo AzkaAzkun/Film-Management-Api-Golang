@@ -25,7 +25,10 @@ func NewUser(userService service.UserService) UserController {
 
 func (c *userController) GetById(ctx *gin.Context) {
 	userId := ctx.Param("id")
-	result, err := c.userService.GetById(ctx.Request.Context(), userId)
+	requesterId, _ := ctx.Get("user_id")
+	requesterIdStr, _ := requesterId.(string)
+
+	result, err := c.userService.GetById(ctx.Request.Context(), userId, requesterIdStr)
 	if err != nil {
 		response.NewFailed("failed get detail user", err).Send(ctx)
 		return

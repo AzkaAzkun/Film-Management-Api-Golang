@@ -10,6 +10,6 @@ import (
 func User(app *gin.Engine, usercontroller controller.UserController, middleware middleware.Middleware) {
 	routes := app.Group("/api/v1/users")
 	{
-		routes.GET("/:id", usercontroller.GetById)
+		routes.GET("/:id", middleware.AuthenticateOptional(), usercontroller.GetById)
 	}
 }
