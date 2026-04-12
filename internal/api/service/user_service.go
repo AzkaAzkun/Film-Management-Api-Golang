@@ -4,6 +4,7 @@ import (
 	"context"
 	"film-management-api-golang/internal/api/repository"
 	"film-management-api-golang/internal/dto"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -33,10 +34,17 @@ func (s *userService) GetById(ctx context.Context, userId string, requesterId st
 		return dto.UserResponse{}, err
 	}
 
+	fmt.Printf("user: %v\n requester: %v\n", userId, requesterId)
+
+	isOwner := userId == requesterId
+	fmt.Print("isOwner: ", isOwner)
+
 	var filmLists []dto.FilmListResponse
 	for _, filmlist := range user.FilmLists {
 		// Visibility Logic: 
 		// Hide private lists if the requester is not the owner
+		visibility := filmlist.Visibility == "private" && userId != requesterId
+		fmt.Print("visibility: ", visibility)	
 		if filmlist.Visibility == "private" && userId != requesterId {
 			continue
 		}
